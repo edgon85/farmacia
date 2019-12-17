@@ -1,3 +1,4 @@
+import 'package:farm_app/src/pages/acounts/login_page.dart';
 import 'package:farm_app/src/pages/container_page.dart';
 import 'package:farm_app/src/utils/theme.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +16,10 @@ class MyApp extends StatelessWidget {
      /* theme: ThemeData(
         primarySwatch: Colors.blue,
       ),*/
-      initialRoute: 'container',
+      initialRoute: 'login',
       routes: {
-        'container': (BuildContext context) => ContainerPage()
+        'container': (BuildContext context) => ContainerPage(),
+        'login': (BuildContext context) => LoginPage(),
       },
     );
   }
