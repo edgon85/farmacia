@@ -1,3 +1,5 @@
+import 'package:farm_app/src/bloc/login_bloc.dart';
+import 'package:farm_app/src/bloc/provider.dart';
 import 'package:farm_app/src/utils/color_app.dart';
 import 'package:flutter/material.dart';
 
@@ -22,6 +24,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _loginContainer(BuildContext context) {
+    // creo una instancia de provider
+    final bloc = Provider.of(context);
+
     final size = MediaQuery.of(context).size;
 
     return SingleChildScrollView(
@@ -64,11 +69,11 @@ class _LoginPageState extends State<LoginPage> {
                 /*>===============================================<*/
                 /*inputs del login*/
                 /*>===============================================<*/
-                _emailInput(),
+                _emailInput(bloc),
                 SizedBox(
                   height: 30.0,
                 ),
-                _passwordInput(),
+                _passwordInput(bloc),
                 SizedBox(
                   height: 30.0,
                 ),
@@ -99,36 +104,59 @@ class _LoginPageState extends State<LoginPage> {
   /*>===============================================<*/
   /*email input login*/
   /*>===============================================<*/
-  Widget _emailInput() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
-      child: TextField(
-        keyboardType: TextInputType.emailAddress,
-        decoration: InputDecoration(
-          icon: Icon(Icons.alternate_email, color: ColorApp.accentColor),
-          hintText: 'correo@tucorreo.com',
-          labelText: 'Correo electrónico',
-        ),
-      ),
-    );
+  Widget _emailInput(LoginBloc bloc) {
+    return StreamBuilder(
+        stream: bloc.emailStream,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: TextField(
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                  icon:
+                      Icon(Icons.alternate_email, color: ColorApp.accentColor),
+                  hintText: 'correo@tucorreo.com',
+                  labelText: 'Correo electrónico',
+                  counterText: snapshot.data),
+
+              /*============================================*/
+              // enviamos el cambio que hay en el input
+              /*============================================*/
+              onChanged: (value) => bloc.changeSinkEmail(value),
+              /*============================================*/
+            ),
+          );
+        });
   }
+
   /*<===============================================>*/
 
   /*>===============================================<*/
   /*password input login*/
   /*>===============================================<*/
-  Widget _passwordInput() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
-      child: TextField(
-        obscureText: true,
-        decoration: InputDecoration(
-          icon: Icon(Icons.lock_outline, color: ColorApp.accentColor),
-          labelText: 'Contraseña',
-        ),
-      ),
-    );
+  Widget _passwordInput(LoginBloc bloc) {
+    return StreamBuilder(
+        stream: bloc.passwordStream,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: TextField(
+              obscureText: true,
+              decoration: InputDecoration(
+                icon: Icon(Icons.lock_outline, color: ColorApp.accentColor),
+                labelText: 'Contraseña',
+                counterText: snapshot.data
+              ),
+              /*============================================*/
+              // enviamos el cambio que hay en el input
+              /*============================================*/
+              onChanged: (value) => bloc.changeSinkPassword(value),
+              /*============================================*/
+            ),
+          );
+        });
   }
+
   /*<===============================================>*/
 
   /*>===============================================<*/
@@ -148,6 +176,7 @@ class _LoginPageState extends State<LoginPage> {
         color: ColorApp.accentColor,
         onPressed: () {});
   }
+
   /*<===============================================>*/
 
   /*>===============================================<*/
