@@ -117,7 +117,9 @@ class _LoginPageState extends State<LoginPage> {
                       Icon(Icons.alternate_email, color: ColorApp.accentColor),
                   hintText: 'correo@tucorreo.com',
                   labelText: 'Correo electrónico',
-                  counterText: snapshot.data),
+                  counterText: snapshot.data,
+                errorText: snapshot.error
+              ),
 
               /*============================================*/
               // enviamos el cambio que hay en el input
@@ -145,7 +147,8 @@ class _LoginPageState extends State<LoginPage> {
               decoration: InputDecoration(
                 icon: Icon(Icons.lock_outline, color: ColorApp.accentColor),
                 labelText: 'Contraseña',
-                counterText: snapshot.data
+                counterText: snapshot.data,
+                errorText: snapshot.error
               ),
               /*============================================*/
               // enviamos el cambio que hay en el input

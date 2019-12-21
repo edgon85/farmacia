@@ -1,6 +1,8 @@
 import 'dart:async';
 
-class LoginBloc {
+import 'package:farm_app/src/bloc/validators.dart';
+
+class LoginBloc with Validators{
   final _emailControler = StreamController<String>.broadcast();
   final _passwordControler = StreamController<String>.broadcast();
 
@@ -16,9 +18,9 @@ class LoginBloc {
   /*>=============================================================<*/
   /*Recuperar los datos del Stream*/
   /*>=============================================================<*/
-  Stream<String> get emailStream => _emailControler.stream;
+  Stream<String> get emailStream => _emailControler.stream.transform(validarEmail);
 
-  Stream<String> get passwordStream => _passwordControler.stream;
+  Stream<String> get passwordStream => _passwordControler.stream.transform(validarPassword);
 
   /*<=============================================================>*/
 
