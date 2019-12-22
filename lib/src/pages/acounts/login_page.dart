@@ -77,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(
                   height: 30.0,
                 ),
-                _buttonLogin(),
+                _buttonLogin(bloc),
                 /*<===============================================>*/
               ],
             ),
@@ -118,8 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: 'correo@tucorreo.com',
                   labelText: 'Correo electrónico',
                   counterText: snapshot.data,
-                errorText: snapshot.error
-              ),
+                  errorText: snapshot.error),
 
               /*============================================*/
               // enviamos el cambio que hay en el input
@@ -145,11 +144,10 @@ class _LoginPageState extends State<LoginPage> {
             child: TextField(
               obscureText: true,
               decoration: InputDecoration(
-                icon: Icon(Icons.lock_outline, color: ColorApp.accentColor),
-                labelText: 'Contraseña',
-                counterText: snapshot.data,
-                errorText: snapshot.error
-              ),
+                  icon: Icon(Icons.lock_outline, color: ColorApp.accentColor),
+                  labelText: 'Contraseña',
+                  counterText: snapshot.data,
+                  errorText: snapshot.error),
               /*============================================*/
               // enviamos el cambio que hay en el input
               /*============================================*/
@@ -165,19 +163,24 @@ class _LoginPageState extends State<LoginPage> {
   /*>===============================================<*/
   /*button login*/
   /*>===============================================<*/
-  Widget _buttonLogin() {
-    return RaisedButton(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
-          child: Text('Ingresar'),
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5.0),
-        ),
-        elevation: 0.0,
-        textColor: Colors.white,
-        color: ColorApp.accentColor,
-        onPressed: () {});
+  Widget _buttonLogin(LoginBloc bloc) {
+    return StreamBuilder(
+        stream: bloc.formValidStream,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          return RaisedButton(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
+                child: Text('Ingresar'),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              elevation: 0.0,
+              textColor: Colors.white,
+              color: ColorApp.accentColor,
+              onPressed: snapshot.hasData ? (){} : null,
+              );
+        });
   }
 
   /*<===============================================>*/

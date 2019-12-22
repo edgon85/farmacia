@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:farm_app/src/bloc/validators.dart';
+import 'package:rxdart/rxdart.dart';
 
-class LoginBloc with Validators{
-  final _emailControler = StreamController<String>.broadcast();
-  final _passwordControler = StreamController<String>.broadcast();
+class LoginBloc with Validators {
+  final _emailControler = BehaviorSubject<String>();
+  final _passwordControler = BehaviorSubject<String>();
 
   /*>=============================================================<*/
   /*Insertar valores al Stream<*/
@@ -18,11 +19,19 @@ class LoginBloc with Validators{
   /*>=============================================================<*/
   /*Recuperar los datos del Stream*/
   /*>=============================================================<*/
-  Stream<String> get emailStream => _emailControler.stream.transform(validarEmail);
+  Stream<String> get emailStream =>
+      _emailControler.stream.transform(validarEmail);
 
-  Stream<String> get passwordStream => _passwordControler.stream.transform(validarPassword);
+  Stream<String> get passwordStream =>
+      _passwordControler.stream.transform(validarPassword);
 
   /*<=============================================================>*/
+
+  /*================================================================*/
+  // validación del formulario //
+  /*================================================================*/
+  Stream<bool> get formValidStream => CombineLatestStream.combine2(
+      emailStream, passwordStream, (email, password) => true);
 
   /*>=============================================================<*/
   /*cerrar el Stream cuando no lo necesite*/
