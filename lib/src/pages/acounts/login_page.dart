@@ -77,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(
                   height: 30.0,
                 ),
-                _buttonLogin(bloc),
+                _buttonLogin(bloc, context),
                 /*<===============================================>*/
               ],
             ),
@@ -163,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
   /*>===============================================<*/
   /*button login*/
   /*>===============================================<*/
-  Widget _buttonLogin(LoginBloc bloc) {
+  Widget _buttonLogin(LoginBloc bloc, BuildContext context) {
     return StreamBuilder(
         stream: bloc.formValidStream,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -178,9 +178,18 @@ class _LoginPageState extends State<LoginPage> {
               elevation: 0.0,
               textColor: Colors.white,
               color: ColorApp.accentColor,
-              onPressed: snapshot.hasData ? (){} : null,
+              onPressed: snapshot.hasData ? ()=>_login(bloc, context) : null,
               );
         });
+  }
+
+
+  _login(LoginBloc bloc, BuildContext context){
+    print('=============');
+    print('Email: ${bloc.email}');
+    print('Password: ${ bloc.password }');
+    print('=============');
+    Navigator.pushReplacementNamed(context, 'container');
   }
 
   /*<===============================================>*/

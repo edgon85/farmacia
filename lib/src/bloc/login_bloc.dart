@@ -33,6 +33,19 @@ class LoginBloc with Validators {
   Stream<bool> get formValidStream => CombineLatestStream.combine2(
       emailStream, passwordStream, (email, password) => true);
 
+  /*<=============================================================>*/
+
+  /*================================================================*/
+  // Obtener el último valor ingresado a los streams //
+  /*================================================================*/
+  String get email => _emailControler.value;
+
+  String get password {
+    return _passwordControler.value;
+  }
+
+  /*<=============================================================>*/
+
   /*>=============================================================<*/
   /*cerrar el Stream cuando no lo necesite*/
   /*>=============================================================<*/
