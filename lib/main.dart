@@ -1,5 +1,6 @@
 import 'package:farm_app/src/bloc/provider.dart';
 import 'package:farm_app/src/pages/acounts/login_page.dart';
+import 'package:farm_app/src/pages/acounts/register_page.dart';
 import 'package:farm_app/src/pages/container_page.dart';
 import 'package:farm_app/src/utils/theme.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         routes: {
           'container': (BuildContext context) => ContainerPage(),
           'login': (BuildContext context) => LoginPage(),
+          'register': (BuildContext context) => RegisterPage(),
         },
       ),
     );

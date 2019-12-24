@@ -2,9 +2,8 @@ import 'package:farm_app/src/bloc/login_bloc.dart';
 import 'package:farm_app/src/bloc/provider.dart';
 import 'package:farm_app/src/utils/color_app.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-class LoginPage extends StatelessWidget {
+class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -55,7 +54,7 @@ class LoginPage extends StatelessWidget {
                 /*Texto de ingreso*/
                 /*>===============================================<*/
                 Text(
-                  'Ingreso',
+                  'Crear cuenta',
                   style: TextStyle(fontSize: 20.0),
                 ),
                 /*<===============================================>*/
@@ -83,13 +82,8 @@ class LoginPage extends StatelessWidget {
           /*Crear cuenta, recuperar contraseña*/
           /*>===============================================<*/
           FlatButton(
-            child: Text('Crear cuenta'),
-           // onPressed: () => Navigator.pushReplacementNamed(context, 'register'),
-            onPressed: (){
-              Firestore.instance.collection('books').document()
-                  .setData({ 'title': 'android', 'author': 'edgon' });
-
-            },
+            child: Text('Iniciar Sesión'),
+            onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
           ),
           SizedBox(
             height: 40.0,

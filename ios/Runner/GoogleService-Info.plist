@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>94185476320-c6mda78othdhdh0374q9cr6mmion0psq.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.94185476320-c6mda78othdhdh0374q9cr6mmion0psq</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>94185476320-jd667018fduj9i7bvur2gi1v5fm3f91i.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBok0aQXdkWOruiX4w1urdpIPHWo6GHOkM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>94185476320</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.wedevgt.farmApp</string>
+	<key>PROJECT_ID</key>
+	<string>farmapp-gt</string>
+	<key>STORAGE_BUCKET</key>
+	<string>farmapp-gt.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:94185476320:ios:7d47984fd16685e87a0085</string>
+	<key>DATABASE_URL</key>
+	<string>https://farmapp-gt.firebaseio.com</string>
+</dict>
+</plist>
