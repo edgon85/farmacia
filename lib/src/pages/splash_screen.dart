@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class SplashScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         child: Center(
-          child: Text('Login page')
+          child: Text('Splash Screen'),
         ),
       ),
     );

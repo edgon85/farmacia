@@ -1,0 +1,63 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+enum Status { Uninitialized, Authenticated, Authenticating, Unauthenticated }
+
+class UserRepository with ChangeNotifier {
+  FirebaseAuth _auth;
+  FirebaseUser _user;
+  final GoogleSignIn _googleSignIn;
+  Status _status = Status.Uninitialized;
+
+  UserRepository.instance()
+      : _auth = FirebaseAuth.instance,
+        _googleSignIn = GoogleSignIn() {
+    _auth.onAuthStateChanged.listen(_onAuthStateChanged);
+  }
+
+  // getter status
+  Status get status => _status;
+
+  // getter user
+  FirebaseUser get user => _user;
+
+  // Login
+  Future<bool> loginEmailAndPassword(String email, String password) async {
+    try {
+      _status = Status.Authenticating;
+      notifyListeners();
+
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+
+      return true;
+    } catch (e) {
+      _status = Status.Unauthenticated;
+      notifyListeners();
+
+      return false;
+    }
+  }
+
+  // logout
+  Future signOut() {
+    _auth.signOut();
+    _status = Status.Unauthenticated;
+
+    notifyListeners();
+
+    return Future.delayed(Duration.zero);
+  }
+
+  // state changed
+  Future<void> _onAuthStateChanged(FirebaseUser firebaseUser) async {
+    if (firebaseUser == null) {
+      _status = Status.Unauthenticated;
+    } else {
+      _user = firebaseUser;
+      _status = Status.Authenticated;
+    }
+
+    notifyListeners();
+  }
+}

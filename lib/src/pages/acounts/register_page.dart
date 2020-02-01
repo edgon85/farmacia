@@ -11,7 +11,7 @@ class RegisterPage extends StatelessWidget {
         body: Stack(
           children: <Widget>[
             _fondo(context),
-            _loginContainer(context),
+            // _loginContainer(context),
           ],
         ),
       ),
