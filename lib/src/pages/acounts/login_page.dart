@@ -114,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                             onPressed: () async {
                               if (!await user.loginWithGoogle()) {
                                 _key.currentState.showSnackBar(SnackBar(
-                                  content: Text('Algo salio mal :('),
+                                  content: Text(user.authError),
                                 ));
                               }else {
                                 Navigator.pop(context);

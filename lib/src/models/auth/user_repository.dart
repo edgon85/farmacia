@@ -1,3 +1,4 @@
+import 'package:farm_app/src/common/accounts/handle_error_firebase.dart';
 import 'package:farm_app/src/providers/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,6 +14,7 @@ class UserRepository with ChangeNotifier {
   String _authError;
 
   final firebaseUserProvider = UserProvider();
+  final firebaseHerror = new HandleHerrorFirebase();
 
   UserRepository.instance()
       : _auth = FirebaseAuth.instance,
@@ -40,6 +42,7 @@ class UserRepository with ChangeNotifier {
       return true;
     } catch (e) {
       _status = Status.Unauthenticated;
+      _authError = firebaseHerror.handleErrorAuth(e.code);
       notifyListeners();
 
       return false;
@@ -54,7 +57,7 @@ class UserRepository with ChangeNotifier {
 
       final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
       final GoogleSignInAuthentication googleAuth =
-      await googleUser.authentication;
+          await googleUser.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.getCredential(
         accessToken: googleAuth.accessToken,
@@ -67,8 +70,8 @@ class UserRepository with ChangeNotifier {
 
       return true;
     } catch (e) {
-      print(e);
       _status = Status.Unauthenticated;
+      _authError = firebaseHerror.handleErrorAuth(e.code);
       notifyListeners();
       return false;
     }
@@ -88,7 +91,10 @@ class UserRepository with ChangeNotifier {
       return true;
     } catch (e) {
       _status = Status.Unauthenticated;
-      _authError = e.toString();
+
+      _authError = firebaseHerror.handleErrorAuth(e.code);
+
+      print('authError => $e');
       notifyListeners();
 
       return false;
