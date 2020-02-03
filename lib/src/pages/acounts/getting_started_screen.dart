@@ -92,9 +92,10 @@ class _GettingStartedScreenState extends State<GettingStartedScreen> {
                     onPressed: () => Navigator.pushNamed(context, '/login'),
                   ),
                 ],
+              ),
+              SizedBox(
+                height: 20,
               )
-              ,
-              SizedBox(height: 20,)
             ],
           ),
         ),
@@ -103,15 +104,18 @@ class _GettingStartedScreenState extends State<GettingStartedScreen> {
   }
 
   void _transition() {
-    Timer.periodic(Duration(seconds: 3), (Timer timer) {
+    Timer.periodic(Duration(seconds: 3), (Timer timer) async {
       if (_currentPage < 2) {
         _currentPage++;
       } else {
         _currentPage = 0;
       }
 
-      _pageController.animateToPage(_currentPage,
-          duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+      if(_pageController.hasClients){
+        await _pageController.animateToPage(_currentPage,
+            duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+      }
+
     });
   }
 }

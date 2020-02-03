@@ -1,3 +1,4 @@
+import 'package:farm_app/src/providers/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -9,6 +10,9 @@ class UserRepository with ChangeNotifier {
   FirebaseUser _user;
   final GoogleSignIn _googleSignIn;
   Status _status = Status.Uninitialized;
+  String _authError;
+
+  final firebaseUserProvider = UserProvider();
 
   UserRepository.instance()
       : _auth = FirebaseAuth.instance,
@@ -22,6 +26,9 @@ class UserRepository with ChangeNotifier {
   // getter user
   FirebaseUser get user => _user;
 
+  // getter error
+  String get authError => _authError;
+
   // Login
   Future<bool> loginEmailAndPassword(String email, String password) async {
     try {
@@ -33,6 +40,55 @@ class UserRepository with ChangeNotifier {
       return true;
     } catch (e) {
       _status = Status.Unauthenticated;
+      notifyListeners();
+
+      return false;
+    }
+  }
+
+  // login with google
+  Future<bool> loginWithGoogle() async {
+    try {
+      _status = Status.Authenticating;
+      notifyListeners();
+
+      final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleAuth =
+      await googleUser.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.getCredential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      await _auth.signInWithCredential(credential);
+
+      firebaseUserProvider.updateUserDataGoogle(_user);
+
+      return true;
+    } catch (e) {
+      print(e);
+      _status = Status.Unauthenticated;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  // crear cuenta
+  Future<bool> createAccount(String email, String password, String name) async {
+    try {
+      _status = Status.Authenticating;
+      notifyListeners();
+
+      await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+
+      firebaseUserProvider.updateUserDataEmailAndPassword(_user, name, '');
+
+      return true;
+    } catch (e) {
+      _status = Status.Unauthenticated;
+      _authError = e.toString();
       notifyListeners();
 
       return false;
