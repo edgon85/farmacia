@@ -1,4 +1,3 @@
-import 'package:farm_app/src/bloc/provider.dart';
 import 'package:farm_app/src/models/auth/user_repository.dart';
 import 'package:farm_app/src/pages/acounts/getting_started_screen.dart';
 import 'package:farm_app/src/pages/acounts/login_page.dart';
