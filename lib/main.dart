@@ -3,6 +3,7 @@ import 'package:farm_app/src/pages/acounts/getting_started_screen.dart';
 import 'package:farm_app/src/pages/acounts/login_page.dart';
 import 'package:farm_app/src/pages/acounts/register_page.dart';
 import 'package:farm_app/src/pages/container_page.dart';
+import 'package:farm_app/src/pages/products/product_detail_page.dart';
 import 'package:farm_app/src/pages/splash_screen.dart';
 import 'package:farm_app/src/utils/theme.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +59,7 @@ class MyMaterialApp extends StatelessWidget {
         },
         '/login' : (context) => LoginPage(),
         '/register' : (context) => RegisterPage(),
+        '/product-detail' : (context) => ProductDetailPage(),
       },
     );
   }

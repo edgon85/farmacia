@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:farm_app/src/utils/color_app.dart';
 import 'package:farm_app/src/utils/text_style.dart';
 import 'package:flutter/material.dart';
@@ -23,10 +24,18 @@ class ProductCardWidget extends StatelessWidget {
           children: <Widget>[
             Stack(
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image(
-                    image: AssetImage(urlImage),
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, '/product-detail'),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CachedNetworkImage(
+                      imageUrl: urlImage,
+                      // TODO: cambiar por una imagen de assets
+                      placeholder: (contex, url){
+                        return Center(child: CircularProgressIndicator(),);
+                      },
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    ),
                   ),
                 ),
                 Positioned(
@@ -41,43 +50,49 @@ class ProductCardWidget extends StatelessWidget {
             ),
             Divider(),
             Expanded(
-              child: Row(
-                children: <Widget>[
-                  Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 6.0),
-                      child: Text(
-                        title,
-                        overflow: TextOverflow.clip,
-                        textAlign: TextAlign.start,
-                        style: headingTwoTextStyle,
+              child: GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/product-detail'),
+                child: Row(
+                  children: <Widget>[
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 6.0),
+                        child: Text(
+                          title,
+                          overflow: TextOverflow.clip,
+                          textAlign: TextAlign.start,
+                          style: headingTwoTextStyle,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 6.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        'Q$price',
-                        textAlign: TextAlign.start,
-                      ),
-                      Text(
-                        '$discount',
-                        style: TextStyle(
-                            color: Colors.red,
-                            decoration: TextDecoration.lineThrough),
-                      ),
-                    ],
+                GestureDetector(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 6.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'Q${price.toStringAsFixed(2)}',
+                          textAlign: TextAlign.start,
+                        ),
+                        if(discount != 0) Text(
+                          'Q${discount.toStringAsFixed(2)}',
+                          style: TextStyle(
+                              color: Colors.red,
+                              decoration: TextDecoration.lineThrough),
+                        ),
+                      ],
+                    ),
                   ),
+                  onTap: () => Navigator.pushNamed(context, '/product-detail'),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 6.0),

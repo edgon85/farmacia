@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:farm_app/src/utils/text_style.dart';
 import 'package:flutter/material.dart';
 
@@ -31,9 +32,14 @@ class FeaturedProductWidget extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Image(
-                    image: AssetImage(imagePath),
+                  child: CachedNetworkImage(
+                    imageUrl: imagePath,
                     fit: BoxFit.fill,
+                    // TODO: cambiar por una imagen de assets
+                    placeholder: (contex, url){
+                      return Center(child: CircularProgressIndicator(),);
+                    },
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 )),
           ),

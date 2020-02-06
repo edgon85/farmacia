@@ -1,15 +1,14 @@
 import 'package:farm_app/src/common/drawer.dart';
 import 'package:farm_app/src/common/products/content_heading_widget.dart';
 import 'package:farm_app/src/common/products/product_card_widget.dart';
-import 'package:farm_app/src/models/auth/user_repository.dart';
-import 'package:farm_app/src/models/product/product_model.dart';
 import 'package:farm_app/src/pages/home/widgets/carouserl_widget.dart';
 import 'package:farm_app/src/common/products/featured_product_widget.dart';
+import 'package:farm_app/src/providers/product/product_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   final String name;
+  final productoProvider = new ProductProvider();
 
   HomePage({@required this.name});
 
@@ -59,16 +58,31 @@ class HomePage extends StatelessWidget {
           ),
           Container(
             height: 200,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: <Widget>[
-                  for (var i = 0; i < featuredProductsList.length; i++)
-                    FeaturedProductWidget(
-                        imagePath: featuredProductsList[i].imagePath),
-                ],
-              ),
-            ),
+            child: StreamBuilder(
+                stream: productoProvider.getBestSeller('best_seller'),
+                builder: (context, snapshot) {
+
+                  if (!snapshot.hasData) {
+                    return CircularProgressIndicator();
+                  } else {
+                    if (snapshot.data.documents.length != 0) {
+                      return ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemCount: snapshot.data.documents.length,
+                          itemBuilder: (context, index) {
+                            return FeaturedProductWidget(
+                              imagePath: snapshot.data.documents[index]
+                                  ['imagePath'],
+                            );
+                          });
+                    } else {
+                      return Container(
+                        child: Text('No hay productos disponibles'),
+                      );
+                    }
+                  }
+                }),
           )
         ],
       ),
@@ -77,8 +91,6 @@ class HomePage extends StatelessWidget {
 
   Widget _destacados(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    final double itemHeight = size.height / 2;
-    final double itemWidth = size.width / 2;
 
     return Container(
       child: Column(
@@ -97,21 +109,41 @@ class HomePage extends StatelessWidget {
           ),
           Container(
             padding: EdgeInsets.all(8.0),
-            child: GridView.count(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              childAspectRatio: (.65),
-              children: <Widget>[
-                for (var i = 0; i < featuredProductsList2.length; i++)
-                  ProductCardWidget(
-                    title: featuredProductsList2[i].name,
-                    urlImage: featuredProductsList2[i].imagePath,
-                    price: featuredProductsList2[i].price,
-                    discount: featuredProductsList2[i].discount,
-                  )
-              ],
-              crossAxisCount: 2,
-            ),
+            child: StreamBuilder(
+                stream: productoProvider.getBestSeller('featured'),
+                builder: (context, snapshot) {
+
+                  if (!snapshot.hasData) {
+                    return Container(
+                      child: Center(child: CircularProgressIndicator(),),
+                    );
+                  } else {
+                    if (snapshot.data.documents.length != 0) {
+                      return GridView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2, childAspectRatio: (.65)),
+                        itemCount: snapshot.data.documents.length,
+                        itemBuilder: (context, index) {
+                          return ProductCardWidget(
+                            title: snapshot.data.documents[index]['name'],
+                            urlImage: snapshot.data.documents[index]
+                                ['imagePath'],
+                            price: snapshot.data.documents[index]['price']
+                                .toDouble(),
+                            discount: snapshot.data.documents[index]['discount']
+                                .toDouble(),
+                          );
+                        },
+                      );
+                    } else {
+                      return Container(
+                        child: Text('Productos no disponibles'),
+                      );
+                    }
+                  }
+                }),
           ),
           SizedBox(
             height: 20,

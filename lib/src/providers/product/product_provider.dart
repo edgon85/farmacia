@@ -9,12 +9,20 @@ class ProductProvider {
 
     List<String> data = [];
 
-    for(var i = 0; i < qn.documents.length; i++){
+    for (var i = 0; i < qn.documents.length; i++) {
       data.add(qn.documents[i]['image']);
     }
-
-   // print(data);
+    // print(data);
     return data;
+  }
+
+  // obtener productos mas vendidos y destacados
+  Stream<QuerySnapshot> getBestSeller(String queryId) {
+    final qn = firestore
+        .collection('products')
+        .where(queryId, isEqualTo: true)
+        .snapshots();
+    return qn;
   }
 
 }
