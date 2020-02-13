@@ -25,4 +25,21 @@ class ProductProvider {
     return qn;
   }
 
+  //obtener todas las categorias
+  Stream<QuerySnapshot> getAllCategories() {
+    final qn = firestore.collection('categories').snapshots();
+
+    return qn;
+  }
+
+  // obtener productos por categoria
+  Stream<QuerySnapshot> getProductByCategory(String _category) {
+    final qn = firestore
+        .collection('products')
+        .where('category', isEqualTo: _category)
+        .limit(5)
+        .snapshots();
+
+    return qn;
+  }
 }
