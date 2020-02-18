@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farm_app/src/common/products/product_card_widget.dart';
+import 'package:farm_app/src/models/category/category_detail_model.dart';
 import 'package:farm_app/src/providers/product/product_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CategoriesWidget extends StatelessWidget {
   final List<DocumentSnapshot> documents;
@@ -16,8 +18,8 @@ class CategoriesWidget extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(),
       itemCount: documents.length,
       itemBuilder: (BuildContext context, int index) {
-        print(documents[index]['_id']);
-        return _categories(documents[index]['name'], documents[index]['_id']);
+        return _categories(
+            context, documents[index]['name'], documents[index]['_id']);
       },
       separatorBuilder: (BuildContext context, int index) {
         return Container(
@@ -31,7 +33,9 @@ class CategoriesWidget extends StatelessWidget {
   // <======================================================> //
   // Lista de categorias //
   // <======================================================> //
-  Widget _categories(String category, String categoryId) {
+  Widget _categories(BuildContext context, String category, String categoryId) {
+    final categoryDetail = Provider.of<CategoryDetailModel>(context);
+
     return Container(
       padding: EdgeInsets.symmetric(vertical: 4.0),
       height: 350,
@@ -48,9 +52,16 @@ class CategoriesWidget extends StatelessWidget {
                   category,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                Icon(
-                  Icons.arrow_forward_ios,
-                  color: Colors.grey,
+                InkWell(
+                  onTap: () {
+                    categoryDetail.categoryName = category;
+                    categoryDetail.categoryId = categoryId;
+                    Navigator.pushNamed(context, '/category-detail');
+                  },
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.grey,
+                  ),
                 )
               ],
             ),
@@ -72,8 +83,6 @@ class CategoriesWidget extends StatelessWidget {
         stream: categories.getProductByCategory(categoryId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.active) {
-            print(snapshot.data.documents);
-
             if (snapshot.data.documents.length > 0) {
               return Expanded(
                 child: ListView.builder(

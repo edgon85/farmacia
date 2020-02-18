@@ -42,4 +42,25 @@ class ProductProvider {
 
     return qn;
   }
+
+  // obtener subcategorias
+  Stream<QuerySnapshot> getAllSubcategories(String category) {
+    final qn = firestore
+        .collection('categories')
+        .document(category)
+        .collection('subcategories')
+        .snapshots();
+
+    return qn;
+  }
+
+  // obtener productos por subcategoria
+  Stream<QuerySnapshot> getProductBySubategory(String subcategoryId) {
+    final qn = firestore
+        .collection('products')
+        .where('subcategory', isEqualTo: subcategoryId)
+        .snapshots();
+
+    return qn;
+  }
 }

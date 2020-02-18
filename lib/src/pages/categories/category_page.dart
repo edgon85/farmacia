@@ -24,14 +24,14 @@ class CategoryPage extends StatelessWidget {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.active) {
                     if (snapshot.data.documents.length > 0) {
-                      print(snapshot.data.documents);
+
                       return CategoriesWidget(
                         documents: snapshot.data.documents,
                       );
                     }
                   }
 
-                  print(snapshot.data);
+                 // print(snapshot.data);
                   return Container(
                     child: Center(
                       child: CircularProgressIndicator(),
