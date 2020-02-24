@@ -50,12 +50,7 @@ class SubcategoryDetailPage extends StatelessWidget {
           crossAxisCount: 2, childAspectRatio: (.65)),
       itemCount: snapshot.data.documents.length,
       itemBuilder: (context, index) {
-        return ProductCardWidget(
-          title: snapshot.data.documents[index]['name'],
-          urlImage: snapshot.data.documents[index]['imagePath'],
-          price: snapshot.data.documents[index]['price'].toDouble(),
-          discount: snapshot.data.documents[index]['discount'].toDouble(),
-        );
+        return ProductCardWidget(data: snapshot, index: index,);
       },
     );
   }

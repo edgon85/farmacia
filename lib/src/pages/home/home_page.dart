@@ -111,7 +111,7 @@ class HomePage extends StatelessWidget {
             padding: EdgeInsets.all(8.0),
             child: StreamBuilder(
                 stream: productoProvider.getBestSeller('featured'),
-                builder: (context, snapshot) {
+                builder: (context, AsyncSnapshot snapshot) {
 
                   if (!snapshot.hasData) {
                     return Container(
@@ -126,7 +126,8 @@ class HomePage extends StatelessWidget {
                             crossAxisCount: 2, childAspectRatio: (.65)),
                         itemCount: snapshot.data.documents.length,
                         itemBuilder: (context, index) {
-                          return ProductCardWidget(
+                          return ProductCardWidget(data: snapshot, index: index,);
+/*                          return ProductCardWidget(
                             title: snapshot.data.documents[index]['name'],
                             urlImage: snapshot.data.documents[index]
                                 ['imagePath'],
@@ -134,7 +135,7 @@ class HomePage extends StatelessWidget {
                                 .toDouble(),
                             discount: snapshot.data.documents[index]['discount']
                                 .toDouble(),
-                          );
+                          );*/
                         },
                       );
                     } else {

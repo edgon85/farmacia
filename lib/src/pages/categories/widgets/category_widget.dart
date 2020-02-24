@@ -93,14 +93,15 @@ class CategoriesWidget extends StatelessWidget {
                       return Container(
                         width: 200,
                         height: 290,
-                        child: ProductCardWidget(
+                        child: ProductCardWidget(data: snapshot, index: index,)
+/*                        ProductCardWidget(
                           title: snapshot.data.documents[index]['name'],
                           urlImage: snapshot.data.documents[index]['imagePath'],
                           price: snapshot.data.documents[index]['price']
                               .toDouble(),
                           discount: snapshot.data.documents[index]['discount']
                               .toDouble(),
-                        ),
+                        ),*/
                       );
                     }),
               );

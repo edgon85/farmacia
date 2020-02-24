@@ -1,20 +1,29 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:farm_app/src/models/product/product_model.dart';
 import 'package:farm_app/src/utils/color_app.dart';
 import 'package:farm_app/src/utils/text_style.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductCardWidget extends StatelessWidget {
-  final String title;
-  final String urlImage;
-  final double price;
-  final double discount;
+  final AsyncSnapshot data;
+  final int index;
 
   const ProductCardWidget(
-      {Key key, this.title, this.urlImage, this.price, this.discount})
+      {Key key,@required this.data, @required this.index})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
+    final product = Provider.of<ProductModel>(context);
+
+    // print(product.productItem);
+    String title = data.data.documents[index]['name'];
+    String urlImage = data.data.documents[index]['imagePath'];
+    double price = data.data.documents[index]['price'].toDouble();
+    double discount = data.data.documents[index]['discount'].toDouble();
+
     return Container(
       //width: 200,
       child: Card(
@@ -25,7 +34,25 @@ class ProductCardWidget extends StatelessWidget {
             Stack(
               children: <Widget>[
                 GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, '/product-detail'),
+                  // onTap: () => Navigator.pushNamed(context, '/product-detail'),
+
+                  onTap: (){
+                    product.productItem = new ProductItem(
+                        data.data.documents[index]['_id'],
+                        data.data.documents[index]['best_seller'],
+                        data.data.documents[index]['category'],
+                        data.data.documents[index]['detail'],
+                        discount,
+                        data.data.documents[index]['featured'],
+                        urlImage,
+                        title,
+                        price,
+                        data.data.documents[index]['subcategory']
+                    );
+
+                    print(product.productItem.name);
+                    Navigator.pushNamed(context, '/product-detail');
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: CachedNetworkImage(

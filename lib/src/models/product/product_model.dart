@@ -1,21 +1,43 @@
-class ProductModel {
-  final String name;
-  final String detail;
-  final double price;
-  final double discount;
-  final bool featured;
-  final String imagePath;
+import 'package:flutter/material.dart';
 
-  ProductModel(
-      {this.name,
-      this.imagePath,
-      this.detail,
-      this.price,
-      this.discount,
-      this.featured});
+class ProductModel with ChangeNotifier {
+  ProductItem _productItem;
+
+  ProductItem get productItem => _productItem;
+
+  set productItem(ProductItem value) {
+    _productItem = value;
+    notifyListeners();
+  }
 }
 
-final featuredProductsList = [
+@immutable
+class ProductItem {
+  final String id;
+  final String name;
+  final String category;
+  final String detail;
+  final String imagePath;
+  final String subcategory;
+  final double discount;
+  final double price;
+  final bool bestSeller;
+  final bool featured;
+
+  ProductItem(
+      this.id,
+      this.bestSeller,
+      this.category,
+      this.detail,
+      this.discount,
+      this.featured,
+      this.imagePath,
+      this.name,
+      this.price,
+      this.subcategory);
+}
+
+/*final featuredProductsList = [
   ProductModel(
       name: 'Electrolitos Oral Coco 500Ml',
       detail: 'Electrolitos Orales Sabor Coco 500Ml',
@@ -133,4 +155,4 @@ final featuredProductsList2 = [
       discount: 200.00,
       featured: false,
       imagePath: 'assets/images/productos/espaven.png'),
-];
+];*/
