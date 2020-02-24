@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:farm_app/src/models/product/incrementador_model.dart';
 import 'package:farm_app/src/models/product/product_model.dart';
 import 'package:farm_app/src/utils/color_app.dart';
 import 'package:farm_app/src/utils/text_style.dart';
@@ -9,14 +10,13 @@ class ProductCardWidget extends StatelessWidget {
   final AsyncSnapshot data;
   final int index;
 
-  const ProductCardWidget(
-      {Key key,@required this.data, @required this.index})
+  const ProductCardWidget({Key key, @required this.data, @required this.index})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     final product = Provider.of<ProductModel>(context);
+    final counterProvider = Provider.of<CounterModel>(context);
 
     // print(product.productItem);
     String title = data.data.documents[index]['name'];
@@ -36,7 +36,8 @@ class ProductCardWidget extends StatelessWidget {
                 GestureDetector(
                   // onTap: () => Navigator.pushNamed(context, '/product-detail'),
 
-                  onTap: (){
+                  onTap: () {
+                    counterProvider.setCounter(1);
                     product.productItem = new ProductItem(
                         data.data.documents[index]['_id'],
                         data.data.documents[index]['best_seller'],
@@ -47,8 +48,7 @@ class ProductCardWidget extends StatelessWidget {
                         urlImage,
                         title,
                         price,
-                        data.data.documents[index]['subcategory']
-                    );
+                        data.data.documents[index]['subcategory']);
 
                     print(product.productItem.name);
                     Navigator.pushNamed(context, '/product-detail');
@@ -58,8 +58,10 @@ class ProductCardWidget extends StatelessWidget {
                     child: CachedNetworkImage(
                       imageUrl: urlImage,
                       // TODO: cambiar por una imagen de assets
-                      placeholder: (contex, url){
-                        return Center(child: CircularProgressIndicator(),);
+                      placeholder: (contex, url) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
                       },
                       errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
@@ -110,12 +112,13 @@ class ProductCardWidget extends StatelessWidget {
                           'Q${price.toStringAsFixed(2)}',
                           textAlign: TextAlign.start,
                         ),
-                        if(discount != 0) Text(
-                          'Q${discount.toStringAsFixed(2)}',
-                          style: TextStyle(
-                              color: Colors.red,
-                              decoration: TextDecoration.lineThrough),
-                        ),
+                        if (discount != 0)
+                          Text(
+                            'Q${discount.toStringAsFixed(2)}',
+                            style: TextStyle(
+                                color: Colors.red,
+                                decoration: TextDecoration.lineThrough),
+                          ),
                       ],
                     ),
                   ),

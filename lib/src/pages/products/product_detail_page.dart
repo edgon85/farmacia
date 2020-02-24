@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:farm_app/src/common/gradient_widget.dart';
+import 'package:farm_app/src/models/product/incrementador_model.dart';
 import 'package:farm_app/src/models/product/product_model.dart';
 import 'package:farm_app/src/utils/color_app.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +11,6 @@ class ProductDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
-    final product = Provider.of<ProductModel>(context);
-
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -19,7 +19,7 @@ class ProductDetailPage extends StatelessWidget {
               _customAppbar(),
               SliverList(
                   delegate: SliverChildListDelegate([
-                _imageContainer(screenSize),
+                _imageContainer(context, screenSize),
                 _detailAndPrice(),
                 SizedBox(
                   height: 20,
@@ -28,7 +28,7 @@ class ProductDetailPage extends StatelessWidget {
               ]))
             ],
           ),
-          _buyButton(screenSize),
+          _buyButton(context, screenSize),
         ],
       ),
     );
@@ -37,12 +37,124 @@ class ProductDetailPage extends StatelessWidget {
   // <========================================> //
   // Imagen //
   // <========================================> //
-  Widget _imageContainer(Size screenSie) {
-    return Placeholder(
-      fallbackWidth: double.infinity,
-      fallbackHeight: screenSie.height * 0.5,
+  Widget _imageContainer(BuildContext context, Size screenSie) {
+    final screenHeight = screenSie.height * 0.4;
+
+    return Container(
+      height: screenHeight,
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.topRight,
+              colors: [ColorApp.primaryColor, ColorApp.accentColor]),
+          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(50))),
+      child: _childImageContainer(context, screenHeight),
     );
   }
+
+  Widget _childImageContainer(BuildContext context, double screen) {
+    final counterProvider = Provider.of<CounterModel>(context);
+
+    final product = Provider.of<ProductModel>(context);
+
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          // ==> Titulo
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 15),
+            child: Text(
+              product.productItem.name,
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700),
+            ),
+          ),
+          // ==> Imagen y Aumentador
+          Row(
+            children: <Widget>[
+              // ==> Imagen
+              Expanded(
+                  flex: 3,
+                  child: Container(
+                    height: screen - 60,
+                    child: CachedNetworkImage(
+                      imageUrl: product.productItem.imagePath,
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    ),
+                  )),
+
+              // ==> aumento, decremento
+              Expanded(
+                  child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(25))),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      InkWell(
+                        onTap: () {
+                          counterProvider.increment();
+                          print(counterProvider.getCounter());
+                        },
+                        child: Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                              color: ColorApp.primaryColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15.0))),
+                          child: Center(
+                            child: Text(
+                              '+',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Text(
+                        '${counterProvider.getCounter()}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20.0),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          counterProvider.decrement();
+                          print(counterProvider.getCounter());
+                        },
+                        child: Container(
+                          height: 30,
+                          width: 30,
+                          child: Center(
+                            child: Text('-',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.0)),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ))
+            ],
+          )
+        ],
+      ),
+    );
+  }
+  // <========================================> //
 
   // <========================================> //
   // Detalle y precio //
@@ -78,14 +190,23 @@ class ProductDetailPage extends StatelessWidget {
   // <========================================> //
   // Boton de compra //
   // <========================================> //
-  Widget _buyButton(Size screenSize) {
+  Widget _buyButton(BuildContext context, Size screenSize) {
+    final counterProvider = Provider.of<CounterModel>(context);
+    final product = Provider.of<ProductModel>(context);
+
     return Stack(
       children: <Widget>[
         Positioned(
             bottom: 0.0,
             right: 0.0,
             child: InkWell(
-              onTap: () => print('agregado a mis compras'),
+              onTap: () {
+                print(
+                  'agregado a mis compras => \nnombre: ${product.productItem.name},\nid: ${product.productItem.id}, \ncantidad: ${counterProvider.getCounter()}',
+                );
+
+                Navigator.pop(context);
+              },
               child: Container(
                 width: screenSize.width * 0.4,
                 height: 75.0,

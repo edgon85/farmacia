@@ -1,5 +1,6 @@
 import 'package:farm_app/src/models/auth/user_repository.dart';
 import 'package:farm_app/src/models/category/category_detail_model.dart';
+import 'package:farm_app/src/models/product/incrementador_model.dart';
 import 'package:farm_app/src/models/product/product_model.dart';
 import 'package:farm_app/src/pages/acounts/getting_started_screen.dart';
 import 'package:farm_app/src/pages/acounts/login_page.dart';
@@ -23,8 +24,15 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => UserRepository.instance(),
         ),
-        ChangeNotifierProvider(create: (context) => CategoryDetailModel(),),
-        ChangeNotifierProvider(create: (context) => ProductModel(),),
+        ChangeNotifierProvider(
+          create: (context) => CategoryDetailModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProductModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CounterModel(1),
+        ),
       ],
       child: MyMaterialApp(),
     );
@@ -62,10 +70,10 @@ class MyMaterialApp extends StatelessWidget {
             }
           });
         },
-        '/login' : (context) => LoginPage(),
-        '/register' : (context) => RegisterPage(),
-        '/product-detail' : (context) => ProductDetailPage(),
-        '/category-detail' : (context) => CategoryDetailPage(),
+        '/login': (context) => LoginPage(),
+        '/register': (context) => RegisterPage(),
+        '/product-detail': (context) => ProductDetailPage(),
+        '/category-detail': (context) => CategoryDetailPage(),
       },
     );
   }
