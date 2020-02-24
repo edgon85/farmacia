@@ -11,14 +11,15 @@ class ContainerPage extends StatefulWidget {
 class _ContainerPageState extends State<ContainerPage> {
   int _currentIndex = 0;
 
-  final _home = HomePage();
+  final _home = HomePage(
+    name: '',
+  );
   final _category = CategoryPage();
   final _favorites = FavoritePage();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       /*==============================*/
       /*Body*/
       /*==============================*/
