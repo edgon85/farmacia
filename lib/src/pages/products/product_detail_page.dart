@@ -10,6 +10,7 @@ class ProductDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
+    final product = Provider.of<ProductModel>(context);
 
     return Scaffold(
       body: Stack(
@@ -20,15 +21,16 @@ class ProductDetailPage extends StatelessWidget {
               SliverList(
                   delegate: SliverChildListDelegate([
                 _imageContainer(context, screenSize),
-                _detailAndPrice(),
+                _detailAndPrice(product),
                 SizedBox(
                   height: 20,
                 ),
-                _favButton(),
+                // _favButton(),
               ]))
             ],
           ),
           _buyButton(context, screenSize),
+          _favButton(context, screenSize),
         ],
       ),
     );
@@ -54,7 +56,6 @@ class ProductDetailPage extends StatelessWidget {
 
   Widget _childImageContainer(BuildContext context, double screen) {
     final counterProvider = Provider.of<CounterModel>(context);
-
     final product = Provider.of<ProductModel>(context);
 
     return Container(
@@ -93,7 +94,7 @@ class ProductDetailPage extends StatelessWidget {
                   child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Container(
-                  height: 200,
+                  height: screen - (screen * 0.4),
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(25))),
@@ -159,31 +160,67 @@ class ProductDetailPage extends StatelessWidget {
   // <========================================> //
   // Detalle y precio //
   // <========================================> //
-  Widget _detailAndPrice() {
+  Widget _detailAndPrice(ProductModel product) {
     return Container(
-      height: 100.0,
+      // height: 150.0,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Expanded(flex: 2, child: Placeholder()),
-          Expanded(flex: 1, child: Placeholder())
+          Expanded(
+            flex: 3,
+            child: Container(
+              padding: EdgeInsets.only(left: 10.0, top: 10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Detalle:',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    product.productItem.detail,
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                  /* Text(
+                    'sdjfhasjkfdha kjshdfajsjfasksdlafjlksjdfñklasdfasdjfkñlasjdfk ñladfjasdklñfjklañsdjfklas asjdfklajsfklñasjdfklñadsf ajksflñkjsaklñfjakslñjdf afasjkdfkalsjflkasjdflkjalskfjklasdjfklas sdjfhasjkfdha kjshdfajsjfasksdlafjlksjdfñklasdfasdjfkñlasjdfk ñladfjasdklñfjklañsdjfklas asjdfklajsfklñasjdfklñadsf ajksflñkjsaklñfjakslñjdf afasjkdfkalsjflkasjdflkjalskfjklasdjfklas sdjfhasjkfdha kjshdfajsjfasksdlafjlksjdfñklasdfasdjfkñlasjdfk ñladfjasdklñfjklañsdjfklas asjdfklajsfklñasjdfklñadsf ajksflñkjsaklñfjakslñjdf afasjkdfkalsjflkasjdflkjalskfjklasdjfklas sdjfhasjkfdha kjshdfajsjfasksdlafjlksjdfñklasdfasdjfkñlasjdfk ñladfjasdklñfjklañsdjfklas asjdfklajsfklñasjdfklñadsf ajksflñkjsaklñfjakslñjdf afasjkdfkalsjflkasjdflkjalskfjklasdjfklas',
+                  ), */
+                ],
+              ),
+            ),
+          ),
+
+          // ==>
+          Expanded(
+              flex: 1,
+              child: Container(
+                padding: EdgeInsets.only(top: 20),
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      'Q ${product.productItem.price.toStringAsFixed(2)}',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 18.0),
+                    ),
+                    SizedBox(
+                      height: 2,
+                    ),
+                    if (product.productItem.discount != 0)
+                      Text(
+                        'Q ${product.productItem.discount.toStringAsFixed(2)}',
+                        style: TextStyle(
+                            color: Colors.red,
+                            decoration: TextDecoration.lineThrough),
+                      ),
+                  ],
+                ),
+              ))
         ],
       ),
-    );
-  }
-
-  // <========================================> //
-  // Boton de favorito //
-  // <========================================> //
-  Widget _favButton() {
-    return Row(
-      children: <Widget>[
-        Spacer(),
-        Placeholder(
-          fallbackHeight: 50.0,
-          fallbackWidth: 200.0,
-        ),
-        Spacer(),
-      ],
     );
   }
 
@@ -218,7 +255,7 @@ class ProductDetailPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      'Agregar',
+                      'Comprar',
                       style: TextStyle(
                           color: ColorApp.textIcons,
                           fontWeight: FontWeight.bold,
@@ -239,100 +276,60 @@ class ProductDetailPage extends StatelessWidget {
     );
   }
 
+  // <========================================> //
+  // Boton de favorito //
+  // <========================================> //
+  Widget _favButton(BuildContext context, Size screenSize) {
+    final product = Provider.of<ProductModel>(context);
+
+    return Stack(
+      children: <Widget>[
+        Positioned(
+            bottom: 0.0,
+            left: 0.0,
+            child: InkWell(
+              onTap: () {},
+              child: Container(
+                width: screenSize.width * 0.4,
+                height: 75.0,
+                decoration: BoxDecoration(
+                    gradient: GradientDecoration().myLinearGradient(),
+                    borderRadius:
+                        BorderRadius.only(topRight: Radius.circular(50.0))),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'Agregar',
+                      style: TextStyle(
+                          color: ColorApp.textIcons,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0),
+                    ),
+                    SizedBox(
+                      width: 5.0,
+                    ),
+                    Icon(
+                      Icons.favorite_border,
+                      color: ColorApp.textIcons,
+                    )
+                  ],
+                ),
+              ),
+            ))
+      ],
+    );
+  }
+
   Widget _customAppbar() {
     return SliverAppBar(
       elevation: 0.0,
       floating: false,
       pinned: true,
+      centerTitle: true,
       title: Text('Detalle del producto'),
       flexibleSpace:
           Container(decoration: GradientDecoration().gradientDecoraion()),
     );
   }
 }
-
-/* Stack(
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              Container(
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                        height: 300,
-                        padding: EdgeInsets.only(top: 20, bottom: 20),
-                        child: Image(
-                          image: NetworkImage(product.productItem.imagePath),
-                          fit: BoxFit.fill,
-                        ))
-                  ],
-                ),
-              ),
-              // <====
-              Container(color: Colors.white, child: Divider()),
-              // <====
-              Container(
-                color: Colors.white,
-                child: ListTile(
-                  title: Text(product.productItem.name),
-                  subtitle: Text(product.productItem.detail),
-                  trailing: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('Q ${product.productItem.price}'),
-                      Text(
-                        'Q ${product.productItem.discount}',
-                        style: TextStyle(
-                            color: Colors.red,
-                            decoration: TextDecoration.lineThrough),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            left: 0,
-            child: Container(
-             // color: Colors.red,
-              height: 100.0,
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      color: Colors.green,
-                      child: Padding(
-                          padding: EdgeInsets.all(8.0)
-
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      padding: EdgeInsets.only(left: 10, right: 10),
-                      // color: Colors.yellow,
-                      child: MaterialButton(
-                        onPressed: () {},
-                        // height: 25.0,
-                        color: ColorApp.accentColor,
-                        shape: StadiumBorder(),
-                        child: Text(
-                          'Añadir',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ],
-      ), */

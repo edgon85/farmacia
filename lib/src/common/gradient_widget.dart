@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 class GradientDecoration {
   // gradiente en el appbar
   BoxDecoration gradientDecoraion() {
-    return BoxDecoration(
-        gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.topRight,
-            colors: [ColorApp.primaryColor, ColorApp.accentColor]));
+    return BoxDecoration(gradient: myLinearGradient());
+  }
+
+  myLinearGradient() {
+    return LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.topRight,
+        colors: [ColorApp.primaryColor, ColorApp.accentColor]);
   }
 }
