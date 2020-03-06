@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:farm_app/src/common/gradient_widget.dart';
+import 'package:farm_app/src/models/auth/user_repository.dart';
+import 'package:farm_app/src/models/favorites/favoriteModel.dart';
 import 'package:farm_app/src/models/product/incrementador_model.dart';
 import 'package:farm_app/src/models/product/product_model.dart';
+import 'package:farm_app/src/pages/favorites/widgets/favorite_button_widget.dart';
 import 'package:farm_app/src/utils/color_app.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +14,8 @@ class ProductDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final product = Provider.of<ProductModel>(context);
+    final user = Provider.of<UserRepository>(context);
+    FavoriteModel favoriteModel = new FavoriteModel();
 
     return Scaffold(
       body: Stack(
@@ -30,7 +35,27 @@ class ProductDetailPage extends StatelessWidget {
             ],
           ),
           _buyButton(context, screenSize),
-          _favButton(context, screenSize),
+          FutureBuilder(
+            future: favoriteModel.getFavByPruductAndUser(
+                product.productItem.id, user.user.uid),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                  return new Text('...');
+                case ConnectionState.waiting:
+                  return new Text('Awaiting result...');
+                default:
+                  if (snapshot.hasError)
+                    return new Text('Error: ${snapshot.error}');
+                  else
+                    print('data_desde_furure => ${snapshot.hasData}');
+                  return FavButton(
+                    screenSize: screenSize,
+                    hasData: snapshot.hasData,
+                  );
+              }
+            },
+          )
         ],
       ),
     );
@@ -187,7 +212,7 @@ class ProductDetailPage extends StatelessWidget {
                     style: TextStyle(color: Colors.grey),
                   ),
                   /* Text(
-                    'sdjfhasjkfdha kjshdfajsjfasksdlafjlksjdfñklasdfasdjfkñlasjdfk ñladfjasdklñfjklañsdjfklas asjdfklajsfklñasjdfklñadsf ajksflñkjsaklñfjakslñjdf afasjkdfkalsjflkasjdflkjalskfjklasdjfklas sdjfhasjkfdha kjshdfajsjfasksdlafjlksjdfñklasdfasdjfkñlasjdfk ñladfjasdklñfjklañsdjfklas asjdfklajsfklñasjdfklñadsf ajksflñkjsaklñfjakslñjdf afasjkdfkalsjflkasjdflkjalskfjklasdjfklas sdjfhasjkfdha kjshdfajsjfasksdlafjlksjdfñklasdfasdjfkñlasjdfk ñladfjasdklñfjklañsdjfklas asjdfklajsfklñasjdfklñadsf ajksflñkjsaklñfjakslñjdf afasjkdfkalsjflkasjdflkjalskfjklasdjfklas sdjfhasjkfdha kjshdfajsjfasksdlafjlksjdfñklasdfasdjfkñlasjdfk ñladfjasdklñfjklañsdjfklas asjdfklajsfklñasjdfklñadsf ajksflñkjsaklñfjakslñjdf afasjkdfkalsjflkasjdflkjalskfjklasdjfklas',
+                    'sdjfhasjkfdha kjshdfajsjfasksdlafjlksjdfñklasdfasdjfkñlasjdfk ����ladfjasdklñfjklañsdjfklas asjdfklajsfklñasjdfklñadsf ajksflñkjsaklñfjakslñjdf afasjkdfkalsjflkasjdflkjalskfjklasdjfklas sdjfhasjkfdha kjshdfajsjfasksdlafjlksjdfñklasdfasdjfkñlasjdfk ñladfjasdklñfjklañsdjfklas asjdfklajsfklñasjdfklñadsf ajksflñkjsaklñfjakslñjdf afasjkdfkalsjflkasjdflkjalskfjklasdjfklas sdjfhasjkfdha kjshdfajsjfasksdlafjlksjdfñklasdfasdjfkñlasjdfk ñladfjasdklñfjklañsdjfklas asjdfklajsfklñasjdfklñadsf ajksflñkjsaklñfjakslñjdf afasjkdfkalsjflkasjdflkjalskfjklasdjfklas sdjfhasjkfdha kjshdfajsjfasksdlafjlksjdfñklasdfasdjfkñlasjdfk ñladfjasdklñfjklañsdjfklas asjdfklajsfklñasjdfklñadsf ajksflñkjsaklñfjakslñjdf afasjkdfkalsjflkasjdflkjalskfjklasdjfklas',
                   ), */
                 ],
               ),
@@ -266,51 +291,6 @@ class ProductDetailPage extends StatelessWidget {
                     ),
                     Icon(
                       Icons.arrow_forward,
-                      color: ColorApp.textIcons,
-                    )
-                  ],
-                ),
-              ),
-            ))
-      ],
-    );
-  }
-
-  // <========================================> //
-  // Boton de favorito //
-  // <========================================> //
-  Widget _favButton(BuildContext context, Size screenSize) {
-    final product = Provider.of<ProductModel>(context);
-
-    return Stack(
-      children: <Widget>[
-        Positioned(
-            bottom: 0.0,
-            left: 0.0,
-            child: InkWell(
-              onTap: () {},
-              child: Container(
-                width: screenSize.width * 0.4,
-                height: 75.0,
-                decoration: BoxDecoration(
-                    gradient: GradientDecoration().myLinearGradient(),
-                    borderRadius:
-                        BorderRadius.only(topRight: Radius.circular(50.0))),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      'Agregar',
-                      style: TextStyle(
-                          color: ColorApp.textIcons,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18.0),
-                    ),
-                    SizedBox(
-                      width: 5.0,
-                    ),
-                    Icon(
-                      Icons.favorite_border,
                       color: ColorApp.textIcons,
                     )
                   ],
