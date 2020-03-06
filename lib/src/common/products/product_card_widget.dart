@@ -1,4 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:farm_app/src/models/auth/user_repository.dart';
+import 'package:farm_app/src/models/favorites/favoriteModel.dart';
 import 'package:farm_app/src/models/product/incrementador_model.dart';
 import 'package:farm_app/src/models/product/product_model.dart';
 import 'package:farm_app/src/utils/color_app.dart';
@@ -15,7 +17,10 @@ class ProductCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FavoriteModel favoriteModel = new FavoriteModel();
+
     final product = Provider.of<ProductModel>(context);
+    final user = Provider.of<UserRepository>(context);
     final counterProvider = Provider.of<CounterModel>(context);
 
     // print(product.productItem);
@@ -34,8 +39,6 @@ class ProductCardWidget extends StatelessWidget {
             Stack(
               children: <Widget>[
                 GestureDetector(
-                  // onTap: () => Navigator.pushNamed(context, '/product-detail'),
-
                   onTap: () {
                     counterProvider.setCounter(1);
                     product.productItem = new ProductItem(
@@ -50,7 +53,6 @@ class ProductCardWidget extends StatelessWidget {
                         price,
                         data.data.documents[index]['subcategory']);
 
-                    print(product.productItem.name);
                     Navigator.pushNamed(context, '/product-detail');
                   },
                   child: Padding(
@@ -67,14 +69,30 @@ class ProductCardWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                Positioned(
+                FutureBuilder(
+                    future: favoriteModel.getFavByPruductAndUser(
+                        data.data.documents[index]['_id'], user.user.uid),
+                    builder: (BuildContext context, snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.none:
+                          return Text('...');
+                        case ConnectionState.waiting:
+                          return Text('...');
+                        default:
+                          if (snapshot.hasError)
+                            return Text('Error: ${snapshot.error}');
+                          else
+                            return _favIcon(snapshot.hasData);
+                      }
+                    }),
+/*                 Positioned(
                   top: 15,
                   right: 5,
                   child: Icon(
                     Icons.favorite_border,
-                    color: Colors.grey,
+                    color: Colors.redAccent,
                   ),
-                ),
+                ), */
               ],
             ),
             Divider(),
@@ -141,6 +159,17 @@ class ProductCardWidget extends StatelessWidget {
             )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _favIcon(bool isFavorited) {
+    return Positioned(
+      top: 15,
+      right: 5,
+      child: Icon(
+        isFavorited ? Icons.favorite : Icons.favorite_border,
+        color: isFavorited ? Colors.redAccent : ColorApp.secondaryText,
       ),
     );
   }
