@@ -1,4 +1,5 @@
 import 'package:farm_app/src/common/gradient_widget.dart';
+import 'package:farm_app/src/databases/db_favorites.dart';
 import 'package:farm_app/src/models/auth/user_repository.dart';
 import 'package:farm_app/src/models/favorites/favoriteModel.dart';
 import 'package:farm_app/src/models/product/product_model.dart';
@@ -48,14 +49,21 @@ class _FavButtonState extends State<FavButton> {
     final product = Provider.of<ProductModel>(context);
     final user = Provider.of<UserRepository>(context);
 
+    final favorites = new Favorites(
+      productId: product.productItem.id,
+      userUid: user.user.uid,
+      name: product.productItem.name,
+      image: product.productItem.imagePath,
+      detail: product.productItem.detail,
+    );
+
     return Stack(
       children: <Widget>[
         Positioned(
             bottom: 0.0,
             left: 0.0,
             child: InkWell(
-              onTap: () =>
-                  _toggleFavorite(product.productItem.id, user.user.uid),
+              onTap: () => _toggleFavorite(favorites),
               child: Container(
                 width: widget.screenSize.width * 0.4,
                 height: 75.0,
@@ -91,17 +99,17 @@ class _FavButtonState extends State<FavButton> {
   // <===================================================> //
   // agrega y elimina favoritos
   // <===================================================> //
-  void _toggleFavorite(String productId, String userUid) {
+  void _toggleFavorite(Favorites favorites) {
     FavoriteModel favoriteModel = new FavoriteModel();
     setState(() {
       if (isFavorite) {
-        favoriteModel.removeToFavorite(productId, userUid);
+        favoriteModel.removeToFavorite(favorites.productId, favorites.userUid);
         isFavorite = false;
         isFavtext = 'Agregar';
         isFavIcon = Icons.favorite_border;
         isColorFav = ColorApp.textIcons;
       } else {
-        favoriteModel.addToFavorite(productId, userUid);
+        favoriteModel.addToFavorite(favorites);
         isFavorite = true;
         isFavtext = 'Remover';
         isFavIcon = Icons.favorite;

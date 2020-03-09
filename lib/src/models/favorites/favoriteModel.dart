@@ -6,12 +6,18 @@ class FavoriteModel {
     return data;
   }
 
-  void addToFavorite(String productId, String userId) async {
-    final favorites = new Favorites(productId: productId, userUid: userId);
+  void addToFavorite(Favorites favorites) async {
+    //final favorites = new Favorites();
 
     await FavoritesDB.db.addToFavorites(favorites);
     // notifyListeners();
   }
+  /*  void addToFavorite(String productId, String userId) async {
+    final favorites = new Favorites(productId: productId, userUid: userId);
+
+    await FavoritesDB.db.addToFavorites(favorites);
+    // notifyListeners();
+  } */
 
   void removeToFavorite(String productId, String userUid) async {
     await FavoritesDB.db.deleteOneFav(productId, userUid);
