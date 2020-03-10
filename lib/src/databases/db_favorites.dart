@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:farm_app/src/models/favorites/favoriteModel.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-class Favorites {
+/* class Favorites {
   // final int id;
   final String productId;
   final String userUid;
@@ -39,7 +39,7 @@ class Favorites {
         'image': image,
         'detail': detail
       };
-}
+} */
 
 class FavoritesDB {
   static Database _database;

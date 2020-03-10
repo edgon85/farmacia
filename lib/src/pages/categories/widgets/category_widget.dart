@@ -91,9 +91,12 @@ class CategoriesWidget extends StatelessWidget {
                     itemBuilder: (context, index) {
                       //  return Text(snapshot.data.documents[index]['name']);
                       return Container(
-                        width: 200,
-                        height: 290,
-                        child: ProductCardWidget(data: snapshot, index: index,)
+                          width: 200,
+                          height: 290,
+                          child: ProductCardWidget(
+                            data: snapshot,
+                            index: index,
+                          )
 /*                        ProductCardWidget(
                           title: snapshot.data.documents[index]['name'],
                           urlImage: snapshot.data.documents[index]['imagePath'],
@@ -102,7 +105,7 @@ class CategoriesWidget extends StatelessWidget {
                           discount: snapshot.data.documents[index]['discount']
                               .toDouble(),
                         ),*/
-                      );
+                          );
                     }),
               );
             }

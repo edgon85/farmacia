@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:farm_app/src/common/gradient_widget.dart';
+import 'package:farm_app/src/databases/db_favorites.dart';
 import 'package:farm_app/src/models/auth/user_repository.dart';
-import 'package:farm_app/src/models/favorites/favoriteModel.dart';
 import 'package:farm_app/src/models/product/incrementador_model.dart';
 import 'package:farm_app/src/models/product/product_model.dart';
 import 'package:farm_app/src/pages/favorites/widgets/favorite_button_widget.dart';
@@ -15,7 +15,6 @@ class ProductDetailPage extends StatelessWidget {
     final screenSize = MediaQuery.of(context).size;
     final product = Provider.of<ProductModel>(context);
     final user = Provider.of<UserRepository>(context);
-    FavoriteModel favoriteModel = new FavoriteModel();
 
     return Scaffold(
       body: Stack(
@@ -36,8 +35,9 @@ class ProductDetailPage extends StatelessWidget {
           ),
           _buyButton(context, screenSize),
           FutureBuilder(
-            future: favoriteModel.getFavByPruductAndUser(
-                product.productItem.id, user.user.uid),
+            //future: favoriteModel.getFavByPruductAndUser(
+            future: FavoritesDB.db
+                .isFavoriteById(product.productItem.id, user.user.uid),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
@@ -48,11 +48,10 @@ class ProductDetailPage extends StatelessWidget {
                   if (snapshot.hasError)
                     return new Text('Error: ${snapshot.error}');
                   else
-                    print('data_desde_furure => ${snapshot.hasData}');
-                  return FavButton(
-                    screenSize: screenSize,
-                    hasData: snapshot.hasData,
-                  );
+                    return FavButton(
+                      screenSize: screenSize,
+                      hasData: snapshot.hasData,
+                    );
               }
             },
           )
@@ -212,7 +211,7 @@ class ProductDetailPage extends StatelessWidget {
                     style: TextStyle(color: Colors.grey),
                   ),
                   /* Text(
-                    'sdjfhasjkfdha kjshdfajsjfasksdlafjlksjdfñklasdfasdjfkñlasjdfk ����ladfjasdklñfjklañsdjfklas asjdfklajsfklñasjdfklñadsf ajksflñkjsaklñfjakslñjdf afasjkdfkalsjflkasjdflkjalskfjklasdjfklas sdjfhasjkfdha kjshdfajsjfasksdlafjlksjdfñklasdfasdjfkñlasjdfk ñladfjasdklñfjklañsdjfklas asjdfklajsfklñasjdfklñadsf ajksflñkjsaklñfjakslñjdf afasjkdfkalsjflkasjdflkjalskfjklasdjfklas sdjfhasjkfdha kjshdfajsjfasksdlafjlksjdfñklasdfasdjfkñlasjdfk ñladfjasdklñfjklañsdjfklas asjdfklajsfklñasjdfklñadsf ajksflñkjsaklñfjakslñjdf afasjkdfkalsjflkasjdflkjalskfjklasdjfklas sdjfhasjkfdha kjshdfajsjfasksdlafjlksjdfñklasdfasdjfkñlasjdfk ñladfjasdklñfjklañsdjfklas asjdfklajsfklñasjdfklñadsf ajksflñkjsaklñfjakslñjdf afasjkdfkalsjflkasjdflkjalskfjklasdjfklas',
+                    'sdjfhasjkfdha kjshdfajsjfasksdlafjlksjdfñklasdfasdjfk��lasjdfk ����ladfjasdklñfjklañsdjfklas asjdfklajsfklñasjdfklñadsf ajksflñkjsaklñfjakslñjdf afasjkdfkalsjflkasjdflkjalskfjklasdjfklas sdjfhasjkfdha kjshdfajsjfasksdlafjlksjdfñklasdfasdjfkñlasjdfk ñladfjasdklñfjklañsdjfklas asjdfklajsfklñasjdfklñadsf ajksflñkjsaklñfjakslñjdf afasjkdfkalsjflkasjdflkjalskfjklasdjfklas sdjfhasjkfdha kjshdfajsjfasksdlafjlksjdfñklasdfasdjfkñlasjdfk ñladfjasdklñfjklañsdjfklas asjdfklajsfklñasjdfklñadsf ajksflñkjsaklñfjakslñjdf afasjkdfkalsjflkasjdflkjalskfjklasdjfklas sdjfhasjkfdha kjshdfajsjfasksdlafjlksjdfñklasdfasdjfkñlasjdfk ñladfjasdklñfjklañsdjfklas asjdfklajsfklñasjdfklñadsf ajksflñkjsaklñfjakslñjdf afasjkdfkalsjflkasjdflkjalskfjklasdjfklas',
                   ), */
                 ],
               ),

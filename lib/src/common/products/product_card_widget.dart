@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:farm_app/src/databases/db_favorites.dart';
 import 'package:farm_app/src/models/auth/user_repository.dart';
 import 'package:farm_app/src/models/favorites/favoriteModel.dart';
 import 'package:farm_app/src/models/product/incrementador_model.dart';
@@ -17,7 +18,7 @@ class ProductCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FavoriteModel favoriteModel = new FavoriteModel();
+    // FavoriteModel favoriteModel = new FavoriteModel();
 
     final product = Provider.of<ProductModel>(context);
     final user = Provider.of<UserRepository>(context);
@@ -69,8 +70,9 @@ class ProductCardWidget extends StatelessWidget {
                     ),
                   ),
                 ),
+                //FutureBuilder(future: favoriteModel.getFavByPruductAndUser( data.data.documents[index]['_id'], user.user.uid),
                 FutureBuilder(
-                    future: favoriteModel.getFavByPruductAndUser(
+                    future: FavoritesDB.db.isFavoriteById(
                         data.data.documents[index]['_id'], user.user.uid),
                     builder: (BuildContext context, snapshot) {
                       switch (snapshot.connectionState) {

@@ -29,8 +29,6 @@ class _FavButtonState extends State<FavButton> {
   void initState() {
     super.initState();
 
-    print('data_desde_initState => ${widget.hasData}');
-
     if (widget.hasData) {
       isFavorite = true;
       isFavtext = 'Remover';
@@ -100,16 +98,16 @@ class _FavButtonState extends State<FavButton> {
   // agrega y elimina favoritos
   // <===================================================> //
   void _toggleFavorite(Favorites favorites) {
-    FavoriteModel favoriteModel = new FavoriteModel();
+    // FavoriteModel favoriteModel = new FavoriteModel();
     setState(() {
       if (isFavorite) {
-        favoriteModel.removeToFavorite(favorites.productId, favorites.userUid);
+        FavoritesDB.db.deleteOneFav(favorites.productId, favorites.userUid);
         isFavorite = false;
         isFavtext = 'Agregar';
         isFavIcon = Icons.favorite_border;
         isColorFav = ColorApp.textIcons;
       } else {
-        favoriteModel.addToFavorite(favorites);
+        FavoritesDB.db.addToFavorites(favorites);
         isFavorite = true;
         isFavtext = 'Remover';
         isFavIcon = Icons.favorite;
