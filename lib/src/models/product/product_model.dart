@@ -25,7 +25,7 @@ class ProductItem {
   final bool featured;
 
   ProductItem(
-      this.id,
+      {this.id,
       this.bestSeller,
       this.category,
       this.detail,
@@ -34,7 +34,7 @@ class ProductItem {
       this.imagePath,
       this.name,
       this.price,
-      this.subcategory);
+      this.subcategory});
 }
 
 /*final featuredProductsList = [

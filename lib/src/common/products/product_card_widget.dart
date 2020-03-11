@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:farm_app/src/databases/db_favorites.dart';
 import 'package:farm_app/src/models/auth/user_repository.dart';
-import 'package:farm_app/src/models/favorites/favoriteModel.dart';
 import 'package:farm_app/src/models/product/incrementador_model.dart';
 import 'package:farm_app/src/models/product/product_model.dart';
 import 'package:farm_app/src/utils/color_app.dart';
@@ -43,16 +42,16 @@ class ProductCardWidget extends StatelessWidget {
                   onTap: () {
                     counterProvider.setCounter(1);
                     product.productItem = new ProductItem(
-                        data.data.documents[index]['_id'],
-                        data.data.documents[index]['best_seller'],
-                        data.data.documents[index]['category'],
-                        data.data.documents[index]['detail'],
-                        discount,
-                        data.data.documents[index]['featured'],
-                        urlImage,
-                        title,
-                        price,
-                        data.data.documents[index]['subcategory']);
+                        id: data.data.documents[index]['_id'],
+                        bestSeller: data.data.documents[index]['best_seller'],
+                        category: data.data.documents[index]['category'],
+                        detail: data.data.documents[index]['detail'],
+                        discount: discount,
+                        featured: data.data.documents[index]['featured'],
+                        imagePath: urlImage,
+                        name: title,
+                        price: price,
+                        subcategory: data.data.documents[index]['subcategory']);
 
                     Navigator.pushNamed(context, '/product-detail');
                   },
@@ -87,14 +86,6 @@ class ProductCardWidget extends StatelessWidget {
                             return _favIcon(snapshot.hasData);
                       }
                     }),
-/*                 Positioned(
-                  top: 15,
-                  right: 5,
-                  child: Icon(
-                    Icons.favorite_border,
-                    color: Colors.redAccent,
-                  ),
-                ), */
               ],
             ),
             Divider(),
