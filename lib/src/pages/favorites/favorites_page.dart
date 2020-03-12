@@ -24,7 +24,7 @@ class FavoritePage extends StatelessWidget {
 
               FutureBuilder(
                   // future: favoriteModel.getAllFavorites(),
-                  future: FavoritesDB.db.getAllFavorites(),
+                  future: PharmappDB.db.getAllFavorites(),
                   builder: (context, AsyncSnapshot<List<Favorites>> snapshot) {
                     switch (snapshot.connectionState) {
                       case ConnectionState.none:
@@ -148,7 +148,7 @@ class FavoritePage extends StatelessWidget {
           ),
         ),
         onDismissed: (direction) {
-          FavoritesDB.db.deleteOneFav(
+          PharmappDB.db.deleteOneFav(
               snapshot.data[index].productId, snapshot.data[index].userUid);
 
           Scaffold.of(context).showSnackBar(

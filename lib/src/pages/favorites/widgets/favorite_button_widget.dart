@@ -101,13 +101,13 @@ class _FavButtonState extends State<FavButton> {
     // FavoriteModel favoriteModel = new FavoriteModel();
     setState(() {
       if (isFavorite) {
-        FavoritesDB.db.deleteOneFav(favorites.productId, favorites.userUid);
+        PharmappDB.db.deleteOneFav(favorites.productId, favorites.userUid);
         isFavorite = false;
         isFavtext = 'Agregar';
         isFavIcon = Icons.favorite_border;
         isColorFav = ColorApp.textIcons;
       } else {
-        FavoritesDB.db.addToFavorites(favorites);
+        PharmappDB.db.addToFavorites(favorites);
         isFavorite = true;
         isFavtext = 'Remover';
         isFavIcon = Icons.favorite;

@@ -36,7 +36,7 @@ class ProductDetailPage extends StatelessWidget {
           _buyButton(context, screenSize),
           FutureBuilder(
             //future: favoriteModel.getFavByPruductAndUser(
-            future: FavoritesDB.db
+            future: PharmappDB.db
                 .isFavoriteById(product.productItem.id, user.user.uid),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {

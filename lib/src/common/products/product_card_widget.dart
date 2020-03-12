@@ -71,7 +71,7 @@ class ProductCardWidget extends StatelessWidget {
                 ),
                 //FutureBuilder(future: favoriteModel.getFavByPruductAndUser( data.data.documents[index]['_id'], user.user.uid),
                 FutureBuilder(
-                    future: FavoritesDB.db.isFavoriteById(
+                    future: PharmappDB.db.isFavoriteById(
                         data.data.documents[index]['_id'], user.user.uid),
                     builder: (BuildContext context, snapshot) {
                       switch (snapshot.connectionState) {
