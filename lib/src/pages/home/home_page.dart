@@ -1,3 +1,4 @@
+import 'package:farm_app/src/common/cart/icon_cart.dart';
 import 'package:farm_app/src/common/drawer.dart';
 import 'package:farm_app/src/common/products/content_heading_widget.dart';
 import 'package:farm_app/src/common/products/product_card_widget.dart';
@@ -16,9 +17,10 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('FarmApp'),
+        title: Text('PharmApp'),
         centerTitle: true,
         elevation: 0,
+        actions: <Widget>[_searchIcon(), IconCart()],
       ),
       drawer: DrawerMenu(),
       body: Stack(
@@ -61,7 +63,6 @@ class HomePage extends StatelessWidget {
             child: StreamBuilder(
                 stream: productoProvider.getBestSeller('best_seller'),
                 builder: (context, snapshot) {
-
                   if (!snapshot.hasData) {
                     return CircularProgressIndicator();
                   } else {
@@ -112,10 +113,11 @@ class HomePage extends StatelessWidget {
             child: StreamBuilder(
                 stream: productoProvider.getBestSeller('featured'),
                 builder: (context, AsyncSnapshot snapshot) {
-
                   if (!snapshot.hasData) {
                     return Container(
-                      child: Center(child: CircularProgressIndicator(),),
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
                     );
                   } else {
                     if (snapshot.data.documents.length != 0) {
@@ -126,16 +128,10 @@ class HomePage extends StatelessWidget {
                             crossAxisCount: 2, childAspectRatio: (.65)),
                         itemCount: snapshot.data.documents.length,
                         itemBuilder: (context, index) {
-                          return ProductCardWidget(data: snapshot, index: index,);
-/*                          return ProductCardWidget(
-                            title: snapshot.data.documents[index]['name'],
-                            urlImage: snapshot.data.documents[index]
-                                ['imagePath'],
-                            price: snapshot.data.documents[index]['price']
-                                .toDouble(),
-                            discount: snapshot.data.documents[index]['discount']
-                                .toDouble(),
-                          );*/
+                          return ProductCardWidget(
+                            data: snapshot,
+                            index: index,
+                          );
                         },
                       );
                     } else {
@@ -151,6 +147,16 @@ class HomePage extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+
+  Widget _searchIcon() {
+    return Container(
+      child: IconButton(
+          icon: Icon(Icons.search),
+          onPressed: () {
+            print('Buscar...');
+          }),
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:farm_app/src/models/product/product_model.dart';
 import 'package:farm_app/src/pages/acounts/getting_started_screen.dart';
 import 'package:farm_app/src/pages/acounts/login_page.dart';
 import 'package:farm_app/src/pages/acounts/register_page.dart';
+import 'package:farm_app/src/pages/cart/cart_page.dart';
 import 'package:farm_app/src/pages/categories/category_detail_page.dart';
 import 'package:farm_app/src/pages/container_page.dart';
 import 'package:farm_app/src/pages/products/product_detail_page.dart';
@@ -74,6 +75,7 @@ class MyMaterialApp extends StatelessWidget {
         '/register': (context) => RegisterPage(),
         '/product-detail': (context) => ProductDetailPage(),
         '/category-detail': (context) => CategoryDetailPage(),
+        '/cart-page': (context) => CartPage(),
       },
     );
   }
