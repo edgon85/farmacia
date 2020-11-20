@@ -1,6 +1,46 @@
+import 'package:farm_app/src/models/product/product_model.dart';
 import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 
-class Cart {
+class Cart with ChangeNotifier {
+  List<CartItem> _carts = [];
+  double _total = 0.0;
+
+  void add(CartItem cartItem) {
+    _carts.add(cartItem);
+    _total += cartItem.subtotal;
+  }
+
+  void remove(CartItem cartItem) {
+    _total -= cartItem.subtotal;
+    _carts.remove(cartItem);
+  }
+
+  int get count {
+    return _carts.length;
+  }
+
+  double get total {
+    return _total;
+  }
+
+  List<CartItem> get bascketItems {
+    return _carts;
+  }
+}
+
+class CartItem {
+  final String id;
+  final int quanity;
+  final ProductItem productItem;
+  final double subtotal;
+
+  CartItem({this.id, this.quanity, this.productItem})
+      : subtotal = productItem.price * quanity,
+        super();
+}
+
+/* class Cart {
   final String userUid;
   final String productId;
   final String productName;
@@ -36,4 +76,4 @@ class Cart {
         'discount': discount,
         'cuantity': cuantity,
       };
-}
+} */

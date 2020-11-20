@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:farm_app/src/common/gradient_widget.dart';
 import 'package:farm_app/src/databases/db_favorites.dart';
 import 'package:farm_app/src/models/auth/user_repository.dart';
+import 'package:farm_app/src/models/cart/cart_model.dart';
 import 'package:farm_app/src/models/product/incrementador_model.dart';
 import 'package:farm_app/src/models/product/product_model.dart';
 import 'package:farm_app/src/pages/favorites/widgets/favorite_button_widget.dart';
@@ -254,6 +255,7 @@ class ProductDetailPage extends StatelessWidget {
   Widget _buyButton(BuildContext context, Size screenSize) {
     final counterProvider = Provider.of<CounterModel>(context);
     final product = Provider.of<ProductModel>(context);
+    final cart = Provider.of<Cart>(context);
 
     return Stack(
       children: <Widget>[
@@ -262,11 +264,16 @@ class ProductDetailPage extends StatelessWidget {
             right: 0.0,
             child: InkWell(
               onTap: () {
-                print(
-                  'agregado a mis compras => \nnombre: ${product.productItem.name},\nid: ${product.productItem.id}, \ncantidad: ${counterProvider.getCounter()}',
-                );
+                final _catItem = new CartItem(
+                    id: '1234567890',
+                    quanity: counterProvider.getCounter(),
+                    productItem: product.productItem);
 
-                Navigator.pop(context);
+                cart.add(_catItem);
+
+                print(cart.bascketItems.toList());
+
+                // Navigator.pop(context);
               },
               child: Container(
                 width: screenSize.width * 0.4,

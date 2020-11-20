@@ -1,4 +1,5 @@
 import 'package:farm_app/src/models/auth/user_repository.dart';
+import 'package:farm_app/src/models/cart/cart_model.dart';
 import 'package:farm_app/src/models/category/category_detail_model.dart';
 import 'package:farm_app/src/models/product/incrementador_model.dart';
 import 'package:farm_app/src/models/product/product_model.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => CounterModel(1),
         ),
+        ChangeNotifierProvider(create: (context) => Cart())
       ],
       child: MyMaterialApp(),
     );
